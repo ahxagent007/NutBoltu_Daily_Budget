@@ -3,60 +3,40 @@ package com.secretdevbd.dexian.dailybudget.DB;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DBhandler extends SQLiteOpenHelper {
     String TAG = "XIAN";
 
-    public static final String DATABASE_NAME = "JanataWifi.db";
+    public static final String DATABASE_NAME = "DailyBudget.db";
 
-    public static final String SERVER_TABLE_NAME = "SERVERS";
-    public static final String SERVER_COLUMN_ID = "server_id";
-    public static final String SERVER_COLUMN_USER_PHONE = "phone";
-    public static final String SERVER_COLUMN_USER_IP = "ip_address";
-    public static final String SERVER_COLUMN_SERVER_NAME = "ftp_server";
-    public static final String SERVER_COLUMN_STATUS = "connect_status";
-    public static final String SERVER_COLUMN_TYPE = "type";
+    public static final String CATEGORY_TABLE_NAME = "CATEGORY";
+    public static final String CATEGORY_ID = "cid";
+    public static final String CATEGORY_TYPE = "ctype";
+    public static final String CATEGORY_NAME = "cname";
 
-    public static final String YT_TABLE_NAME = "YOUTUBE";
-    public static final String YT_COLUMN_ID = "id";
-    public static final String YT_COLUMN_ID_YOUTUBE = "id_youtube";
-    public static final String YT_COLUMN_CHANNEL_ID = "channel_id";
-    public static final String YT_COLUMN_CHANNEL_NAME = "channel_name";
-    public static final String YT_COLUMN_TITLE = "title";
-    public static final String YT_COLUMN_DURATION = "duration";
-    public static final String YT_COLUMN_DEFINITION = "definition";
-    public static final String YT_COLUMN_LICENSED = "licensed_content";
-    public static final String YT_COLUMN_CONTENT_TYPE = "content_type";
-    public static final String YT_COLUMN_PUBLISHED = "published_at";
-    public static final String YT_COLUMN_SUB_TYPE = "content_subtype";
-    public static final String YT_COLUMN_ARTIST_IDS = "artist";
-    public static final String YT_COLUMN_YOUTUBE_LIKE = "youtube_like";
-    public static final String YT_COLUMN_YOUTUBE_LIKE_THIS = "like_this_youtube";
-    public static final String YT_COLUMN_YOUTUBE_COMMENT = "youtube_comment";
-    public static final String YT_COLUMN_YOUTUBE_COMMENT_LIST = "youtube_comment_list";
-    public static final String YT_COLUMN_YOUTUBE_SHARE = "youtube_share";
-    public static final String YT_COLUMN_PROJECTION = "projection";
+    public static final String BUDGET_TABLE_NAME = "BUDGET";
+    public static final String BUDGET_ID = "bid";
+    public static final String BUDGET_AMOUNT = "bamount";
+    public static final String BUDGET_CID = "cid";
+    public static final String BUDGET_MONTH = "bmonth";
+    public static final String BUDGET_YEAR = "byear";
 
 
-    public static final String DOWNLOAD_TABLE_NAME = "DOWNLOADS";
-    public static final String DOWNLOAD_COLUMN_ID = "download_id";
-    public static final String DOWNLOAD_FILE_NAME = "filename";
-    public static final String DOWNLOAD_PERCENT = "percentage";
-    public static final String DOWNLOAD_PATH = "path";
-    public static final String DOWNLOAD_DONE = "done";
-    public static final String DOWNLOAD_WEBSITE = "website";
-    public static final String DOWNLOAD_LINK = "link";
+    public static final String TRANSACTION_TABLE_NAME = "TRANSACTION_TABLE";
+    public static final String TRANSACTION_ID = "tid";
+    public static final String TRANSACTION_NOTE = "tnote";
+    public static final String TRANSACTION_CID = "cid";
+    public static final String TRANSACTION_DAY = "tday";
+    public static final String TRANSACTION_MONTH = "tmonth";
+    public static final String TRANSACTION_YEAR = "tyear";
+    public static final String TRANSACTION_AMOUNT = "tamount";
 
-    public String STATUS_OK = "OK";
+    public static final String SETTING_TABLE_NAME = "SETTING";
+    public static final String SETTING_ID = "sid";
+    public static final String SETTING_NAME = "sname";
+    public static final String SETTING_SETTING = "ssetting";
 
     public DBhandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -66,51 +46,33 @@ public class DBhandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL(
-                "create table " + DOWNLOAD_TABLE_NAME + " " +
+                "create table " + CATEGORY_TABLE_NAME + " " +
                         "("
-                        + DOWNLOAD_COLUMN_ID + " integer primary key, " +
-                        DOWNLOAD_FILE_NAME + " text," +
-                        DOWNLOAD_PERCENT + " integer," +
-                        DOWNLOAD_PATH + " text," +
-                        DOWNLOAD_WEBSITE + " text," +
-                        DOWNLOAD_LINK + " text," +
-                        DOWNLOAD_DONE + " text);"
+                        + CATEGORY_ID + " integer primary key, " +
+                        CATEGORY_TYPE + " text," +
+                        CATEGORY_NAME + " text);"
         );
         db.execSQL(
-                "create table " + SERVER_TABLE_NAME + " " +
-                        "(" + SERVER_COLUMN_ID + " integer primary key, " + SERVER_COLUMN_USER_PHONE + " text," + SERVER_COLUMN_SERVER_NAME + " text," + SERVER_COLUMN_USER_IP + " text," +
-                        " " + SERVER_COLUMN_STATUS + " text , " + SERVER_COLUMN_TYPE + " text, server_name text, ranking integer, image_url text, pinging_url text);"
+                "create table " + BUDGET_TABLE_NAME + " " +
+                        "(" + BUDGET_ID + " integer primary key, " + BUDGET_CID + " integer,"+ BUDGET_AMOUNT + " integer," + BUDGET_MONTH + " integer," + BUDGET_YEAR + " integer);"
         );
 
         db.execSQL(
-                "create table " + YT_TABLE_NAME + " " +
+                "create table " + TRANSACTION_TABLE_NAME + " " +
                         "("
-                        + YT_COLUMN_ID + " integer primary key, " +
-                        YT_COLUMN_CHANNEL_ID + " text," +
-                        YT_COLUMN_ID_YOUTUBE + " text," +
-                        YT_COLUMN_CHANNEL_NAME + " text," +
-                        YT_COLUMN_TITLE + " text, " +
-                        YT_COLUMN_DURATION + " text, " +
-                        YT_COLUMN_DEFINITION + " text, " +
-                        YT_COLUMN_LICENSED + " text, " +
-                        YT_COLUMN_CONTENT_TYPE + " text, " +
-                        YT_COLUMN_PUBLISHED + " text, " +
-                        YT_COLUMN_SUB_TYPE + " text, " +
-                        YT_COLUMN_ARTIST_IDS + " text," +
-                        YT_COLUMN_YOUTUBE_LIKE + " integer, " +
-                        YT_COLUMN_YOUTUBE_LIKE_THIS + " integer, " +
-                        YT_COLUMN_YOUTUBE_COMMENT + " integer, " +
-                        YT_COLUMN_YOUTUBE_COMMENT_LIST + " text," +
-                        YT_COLUMN_PROJECTION + " text," +
-                        YT_COLUMN_YOUTUBE_SHARE + " integer);"
+                        + TRANSACTION_ID + " integer primary key, " +
+                        TRANSACTION_NOTE + " text," +
+                        TRANSACTION_CID + " integer," +
+                        TRANSACTION_DAY + " integer," +
+                        TRANSACTION_MONTH + " integer, " +
+                        TRANSACTION_YEAR + " integer, " +
+                        TRANSACTION_AMOUNT + " integer );"
         );
 
         db.execSQL(
-                "create table all_details (id integer primary key, mac_address text, phone text, ip_address text, sim_operator text, device_name text, location text, user_connection text, wiFisList text," +
-                        " ssid text, bssid text, sim_serial_1 text, sim_serial_2 text, imei_sim_1 text, imei_sim_2 text);"
+                "create table " + SETTING_TABLE_NAME + " " +
+                        "(" + SETTING_ID + " integer primary key, " + SETTING_NAME + " text," + SETTING_SETTING + " text);"
         );
-
-        db.execSQL("CREATE TABLE youtube_artist (artist_id integer primary key, artist_name text)");
 
 
     }
@@ -118,10 +80,10 @@ public class DBhandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS " + SERVER_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + DOWNLOAD_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + YT_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS all_details");
+        db.execSQL("DROP TABLE IF EXISTS " + CATEGORY_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + BUDGET_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TRANSACTION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ SETTING_TABLE_NAME);
         onCreate(db);
     }
 
@@ -188,7 +150,7 @@ public class DBhandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public ArrayList<DownloadDB> getAllDownloads() {
+    /*public ArrayList<DownloadDB> getAllDownloads() {
         ArrayList<DownloadDB> downloadDBS = new ArrayList<DownloadDB>();
 
 
@@ -914,5 +876,5 @@ public class DBhandler extends SQLiteOpenHelper {
             res.moveToNext();
         }
         return array_list;
-    }
+    }*/
 }
