@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DBhandler extends SQLiteOpenHelper {
     String TAG = "XIAN";
 
@@ -37,6 +39,9 @@ public class DBhandler extends SQLiteOpenHelper {
     public static final String SETTING_ID = "sid";
     public static final String SETTING_NAME = "sname";
     public static final String SETTING_SETTING = "ssetting";
+
+    public static final String CAT_TYPE_INCOME = "INCOME";
+    public static final String CAT_TYPE_EXPENSE = "EXPENSE";
 
     public DBhandler(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -87,70 +92,154 @@ public class DBhandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addFTPServer(String phone, String ip, String server, String status, String type, String server_name, String image_url, String pinging_url, int ranking) {
+    public boolean addCategory(String type, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SERVER_COLUMN_USER_PHONE, phone);
-        contentValues.put(SERVER_COLUMN_USER_IP, ip);
-        contentValues.put(SERVER_COLUMN_SERVER_NAME, server);
-        contentValues.put(SERVER_COLUMN_STATUS, status);
-        contentValues.put(SERVER_COLUMN_TYPE, type);
+        contentValues.put(CATEGORY_NAME, name);
+        contentValues.put(CATEGORY_TYPE, type);
 
-        contentValues.put("server_name", server_name);
-        contentValues.put("image_url", image_url);
-        contentValues.put("pinging_url", pinging_url);
-        contentValues.put("ranking", ranking);
-
-        db.insert(SERVER_TABLE_NAME, null, contentValues);
+        db.insert(CATEGORY_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public int addDownload(String filename, int percentage, String path, String done, String website, String link) {
-
+    public boolean addBudget(int cid, int amount, int month, int year) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DOWNLOAD_FILE_NAME, filename);
-        contentValues.put(DOWNLOAD_PERCENT, percentage);
-        contentValues.put(DOWNLOAD_PATH, path);
-        contentValues.put(DOWNLOAD_DONE, done);
-        contentValues.put(DOWNLOAD_WEBSITE, website);
-        contentValues.put(DOWNLOAD_LINK, link);
+        contentValues.put(BUDGET_CID, cid);
+        contentValues.put(BUDGET_AMOUNT, amount);
+        contentValues.put(BUDGET_MONTH, month);
+        contentValues.put(BUDGET_YEAR, year);
 
-        db.insert(DOWNLOAD_TABLE_NAME, null, contentValues);
-        return getLastDownloadID();
-    }
-
-    public boolean updateDownload(int download_id, long percentage, String done) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DOWNLOAD_PERCENT, percentage);
-        contentValues.put(DOWNLOAD_DONE, done);
-
-        db.update(DOWNLOAD_TABLE_NAME, contentValues, "id = ? ", new String[]{Integer.toString(download_id)});
+        db.insert(BUDGET_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public int getLastDownloadID() {
+    public boolean addTransaction(int cid, int amount, int day, int month, int year, String note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRANSACTION_CID, cid);
+        contentValues.put(TRANSACTION_AMOUNT, amount);
+        contentValues.put(TRANSACTION_DAY, month);
+        contentValues.put(TRANSACTION_MONTH, month);
+        contentValues.put(TRANSACTION_YEAR, year);
+        contentValues.put(TRANSACTION_NOTE, month);
+
+        db.insert(TRANSACTION_TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    public boolean updateBudget(int bid, long amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BUDGET_AMOUNT, amount);
+
+        db.update(BUDGET_TABLE_NAME, contentValues, "id = ? ", new String[]{Integer.toString(bid)});
+        return true;
+    }
+
+    public ArrayList<Budget> getAllBudgets() {
+        ArrayList<Budget> budgets = new ArrayList<Budget>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select download_id from " + DOWNLOAD_TABLE_NAME + " ORDER BY download_id DESC LIMIT 1;", null);
+        Cursor res = db.rawQuery("select * from " + BUDGET_TABLE_NAME, null);
         res.moveToFirst();
 
-        int id = 0;
-
         while (res.isAfterLast() == false) {
-
-            if (res != null) {
-                id = res.getInt(res.getColumnIndex(DOWNLOAD_COLUMN_ID));
-            }
+            Budget bgt = new Budget(res.getInt(res.getColumnIndex(BUDGET_ID)), res.getInt(res.getColumnIndex(BUDGET_CID)),
+                    res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex(BUDGET_YEAR)), res.getInt(res.getColumnIndex(BUDGET_MONTH)) );
+            budgets.add(bgt);
 
             res.moveToNext();
-
         }
-        return id;
+        return budgets;
     }
 
-    /*public ArrayList<DownloadDB> getAllDownloads() {
+    public ArrayList<Category> getAllCategories() {
+        ArrayList<Category> categories = new ArrayList<Category>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + CATEGORY_TABLE_NAME, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Category cat = new Category(res.getInt(res.getColumnIndex(CATEGORY_ID)), res.getString(res.getColumnIndex(CATEGORY_TYPE)), res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            categories.add(cat);
+            res.moveToNext();
+        }
+        return categories;
+    }
+
+    public ArrayList<Category> getCategoriesByType(String type) {
+        ArrayList<Category> categories = new ArrayList<Category>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + CATEGORY_TABLE_NAME+ " WHERE "+CATEGORY_TYPE+" = \""+type+"\";", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Category cat = new Category(res.getInt(res.getColumnIndex(CATEGORY_ID)), res.getString(res.getColumnIndex(CATEGORY_TYPE)), res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            categories.add(cat);
+            res.moveToNext();
+        }
+        return categories;
+    }
+
+    public ArrayList<Transaction> getAllTransactions() {
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            transactions.add(txn);
+            res.moveToNext();
+        }
+        return transactions;
+    }
+
+    public ArrayList<Transaction> getAllTransactionsByDate(int day, int month, int year) {
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME +" WHERE day = "+day+" AND month = "+month+" AND year = "+year+";", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            transactions.add(txn);
+            res.moveToNext();
+        }
+        return transactions;
+    }
+
+    public ArrayList<Transaction> getAllTransactionsByMonth(int month, int year) {
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME +" WHERE month = "+month+" AND year = "+year+";", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            transactions.add(txn);
+            res.moveToNext();
+        }
+        return transactions;
+    }
+
+    public void getMonthAndyears(){}
+
+
+    /*
+    public ArrayList<DownloadDB> getAllDownloads() {
         ArrayList<DownloadDB> downloadDBS = new ArrayList<DownloadDB>();
 
 
@@ -176,6 +265,26 @@ public class DBhandler extends SQLiteOpenHelper {
             res.moveToNext();
         }
         return downloadDBS;
+    }
+
+    public int getLastDownloadID() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select download_id from " + DOWNLOAD_TABLE_NAME + " ORDER BY download_id DESC LIMIT 1;", null);
+        res.moveToFirst();
+
+        int id = 0;
+
+        while (res.isAfterLast() == false) {
+
+            if (res != null) {
+                id = res.getInt(res.getColumnIndex(DOWNLOAD_COLUMN_ID));
+            }
+
+            res.moveToNext();
+
+        }
+        return id;
     }
 
     public ArrayList<FTP_Server> getActiveFTP() {
