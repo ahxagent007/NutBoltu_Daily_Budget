@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_dashboard"
+            android:icon="@drawable/ic_dashboard"
+            android:title="Dashboard"/>
+        <item
+            android:id="@+id/menu_transaction"
+            android:icon="@drawable/ic_transaction"
+            android:title="Transaction"/>
+        <item
+            android:id="@+id/menu_category"
+            android:icon="@drawable/ic_category"
+            android:title="Categories"/>
+        <item
+            android:id="@+id/menu_budget"
+            android:icon="@drawable/ic_budget"
+            android:title="Budget"/>
+        <item
+            android:id="@+id/menu_report"
+            android:icon="@drawable/ic_report"
+            android:title="Report"/>
+
+    </group>
+
+
+    <item android:title="Support">
+        <menu>
+            <item
+                android:id="@+id/menu_about"
+                android:icon="@drawable/ic_about"
+                android:title="About"/>
+            <item
+                android:id="@+id/menu_support"
+                android:icon="@drawable/ic_support"
+                android:title="Support"/>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/ic_setting"
+        android:title="Setting"/>
+
+</menu>
