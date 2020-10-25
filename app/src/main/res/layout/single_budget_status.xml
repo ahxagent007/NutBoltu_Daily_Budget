@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_check_green"
+                android:layout_weight="1"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Shopping"
+                android:textSize="15dp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:padding="3dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="[100000]"
+                android:textSize="15dp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:padding="3dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="[100000]"
+                android:textSize="15dp"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:padding="3dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="$-98655"
+                android:textSize="15dp"
+                android:textColor="@color/dark_green"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/dotted"
+            android:layout_weight="0.25"/>
+
+    </LinearLayout>
+
+</LinearLayout>
