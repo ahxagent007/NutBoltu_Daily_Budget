@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.secretdevbd.dexian.dailybudget.Fragment.BudgetFragment;
 import com.secretdevbd.dexian.dailybudget.Fragment.CategoryFragment;
 import com.secretdevbd.dexian.dailybudget.Fragment.DashboardFragment;
 import com.secretdevbd.dexian.dailybudget.Fragment.TransactionFragment;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new CategoryFragment()).commit();
                 break;
             case R.id.menu_budget:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new BudgetFragment()).commit();
 
                 break;
             case R.id.menu_about:

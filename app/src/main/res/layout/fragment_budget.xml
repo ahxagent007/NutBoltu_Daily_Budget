@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Transactions"
+            android:text="Current Budget"
             android:textColor="#000000"
             android:textSize="25dp"
             android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:layout_weight="0.25"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RV_transactions"
+            android:id="@+id/RV_budgets"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9"/>
