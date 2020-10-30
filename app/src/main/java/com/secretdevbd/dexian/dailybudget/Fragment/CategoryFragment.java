@@ -1,13 +1,18 @@
 package com.secretdevbd.dexian.dailybudget.Fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,19 +73,23 @@ public class CategoryFragment extends Fragment {
         return view;
     }
     private void addCategory(){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.add_category);
 
-        AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
-        View myView = getLayoutInflater().inflate(R.layout.add_category, null);
+        dialog.setCancelable(true);
+        dialog.getWindow().setLayout(((getWidth(getActivity()) / 100) * 100), ((getHeight(getActivity()) / 100) * 60));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+
 
         final EditText ET_categoryName;
         final Spinner SP_categoryType;
         Button btn_addCategory;
 
-
-
-        ET_categoryName = myView.findViewById(R.id.ET_categoryName);
-        SP_categoryType = myView.findViewById(R.id.SP_categoryType);
-        btn_addCategory = myView.findViewById(R.id.btn_addCategory);
+        ET_categoryName = dialog.findViewById(R.id.ET_categoryName);
+        SP_categoryType = dialog.findViewById(R.id.SP_categoryType);
+        btn_addCategory = dialog.findViewById(R.id.btn_addCategory);
 
         String[] types = {"Income", "Expense"};
         // Creating adapter for spinner
@@ -89,15 +98,6 @@ public class CategoryFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         SP_categoryType.setAdapter(dataAdapter);
-
-        myBuilder.setView(myView);
-        final AlertDialog dialog = myBuilder.create();
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        dialog.getWindow().setLayout(width, height); //Controlling width and height.
 
         dialog.show();
 
@@ -116,22 +116,34 @@ public class CategoryFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Category Added", Toast.LENGTH_SHORT).show();
                     dialog.cancel();
 
-                    // Reload current fragment
-                    Fragment frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.detach(frg);
-                    ft.attach(frg);
-                    ft.commit();
+                    reloadFragment();
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(), "Please write a name of this category", Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
         });
+    }
+    public void reloadFragment(){
+        // Reload current fragment
+        Fragment frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+    }
 
+    public static int getWidth(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
 
+    public static int getHeight(Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowmanager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     public class RecycleViewAdapterForCategories extends RecyclerView.Adapter<RecycleViewAdapterForCategories.ViewHolder> {
@@ -180,9 +192,37 @@ public class CategoryFragment extends Fragment {
 
             viewHolder.setClickListener(new ItemClickListener() {
                 @Override
-                public void onClick(View view, int position, boolean isLongClick) {
+                public void onClick(View view, final int position, boolean isLongClick) {
                     if (isLongClick) {
+                        AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getContext());
+                        //Uncomment the below code to Set the message and title from the strings.xml file
+                        builder.setMessage("Do you want to delete this Category ?").setTitle("Delete Category");
 
+                        //Setting message manually and performing action on button click
+                        builder.setMessage("Do you want to delete this Category ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        DBhandler DBH = new DBhandler(getContext());
+                                        DBH.deleteCategory(categories.get(position).getCid());
+                                        dialog.cancel();
+                                        Toast.makeText(getContext(),"Category Deleted",
+                                                Toast.LENGTH_SHORT).show();
+                                        reloadFragment();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //  Action for 'NO' Button
+                                        dialog.cancel();
+                                    }
+                                });
+                        //Creating dialog box
+                        AlertDialog alert = builder.create();
+                        //Setting the title manually
+                        alert.setTitle("Delete Category !");
+                        alert.show();
                     } else {
                     }
                 }

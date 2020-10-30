@@ -237,6 +237,17 @@ public class DBhandler extends SQLiteOpenHelper {
 
     public void getMonthAndyears(){}
 
+    public boolean deleteCategory(int id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try{
+            db.execSQL("DELETE FROM " + CATEGORY_TABLE_NAME + " WHERE "+CATEGORY_ID+ " = "+id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
 
     /*
     public ArrayList<DownloadDB> getAllDownloads() {
