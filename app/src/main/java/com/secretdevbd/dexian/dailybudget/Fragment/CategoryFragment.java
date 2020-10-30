@@ -56,7 +56,6 @@ public class CategoryFragment extends Fragment {
         RV_categories = view.findViewById(R.id.RV_categories);
 
         ArrayList<Category> categories = new DBhandler(getContext()).getAllCategories();
-        Log.i(TAG,"DB cat Size : "+categories.size());
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RV_categories.setLayoutManager(mLayoutManager);
@@ -72,6 +71,7 @@ public class CategoryFragment extends Fragment {
 
         return view;
     }
+
     private void addCategory(){
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -123,6 +123,7 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
+
     public void reloadFragment(){
         // Reload current fragment
         Fragment frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);

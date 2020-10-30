@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
+        android:id="@+id/fab_addBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
@@ -18,16 +18,38 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Current Budget"
-            android:textColor="#000000"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="3dp"
-            android:layout_weight="0.75"/>
+            android:layout_weight="0.75"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <Button
+                android:id="@+id/btn_budgetBack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/pressed_back"/>
+            <TextView
+                android:id="@+id/TV_budgetTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Current Budget"
+                android:textColor="#000000"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_weight="8"/>
+            <Button
+                android:id="@+id/btn_budgetNext"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/pressed_forward"/>
+        </LinearLayout>
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"

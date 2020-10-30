@@ -3,6 +3,7 @@ package com.secretdevbd.dexian.dailybudget.DB;
 public class Budget {
 
     int bid, cid, bamount, year, month;
+    String cname, ctype;
 
     public Budget(int bid, int cid, int bamount, int year, int month) {
         this.bid = bid;
@@ -10,6 +11,22 @@ public class Budget {
         this.bamount = bamount;
         this.year = year;
         this.month = month;
+    }
+
+    public String getCtype() {
+        return ctype;
+    }
+
+    public void setCtype(String ctype) {
+        this.ctype = ctype;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
     }
 
     public int getBid() {
