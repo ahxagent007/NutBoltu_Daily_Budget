@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -114,8 +115,13 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
-    public void generateBudgets(int month, int year){
-        TV_budgetTitle.setText("Budget ("+months[month]+"-"+year+")");
+    public void generateBudgets(final int month, final int year){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                TV_budgetTitle.setText("Budget ("+months[month]+"-"+year+")");
+            }
+        });
 
         Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
         ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(month+1, year);
@@ -274,7 +280,7 @@ public class BudgetFragment extends Fragment {
         dialog.setContentView(R.layout.add_budget);
 
         dialog.setCancelable(true);
-        dialog.getWindow().setLayout(((getWidth(getActivity()) / 100) * 100), ((getHeight(getActivity()) / 100) * 60));
+        dialog.getWindow().setLayout(((getWidth(getActivity()) / 100) * 100), ((getHeight(getActivity()) / 100) * 80));
         dialog.getWindow().setGravity(Gravity.CENTER);
 
 

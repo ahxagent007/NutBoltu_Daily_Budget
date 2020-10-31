@@ -225,17 +225,22 @@ public class DBhandler extends SQLiteOpenHelper {
         return transactions;
     }
 
-    public ArrayList<Transaction> getAllTransactionsByDate(int day, int month, int year) {
+    public ArrayList<Transaction> getAllTransactionsByDate(int month, int year) {
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME +" WHERE day = "+day+" AND month = "+month+" AND year = "+year+";", null);
+        Cursor res = db.rawQuery("SELECT TRANSACTION_TABLE.tid, TRANSACTION_TABLE.tnote, TRANSACTION_TABLE.cid, TRANSACTION_TABLE.tamount, TRANSACTION_TABLE.tday, TRANSACTION_TABLE.tmonth, TRANSACTION_TABLE.tyear, " +
+                "CATEGORY.ctype, CATEGORY.cname FROM TRANSACTION_TABLE " +
+                "JOIN CATEGORY ON TRANSACTION_TABLE.cid = CATEGORY.cid " +
+                "WHERE tmonth = "+month+" AND tyear = "+year+";", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
             Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
                     res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
                     res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            txn.setCname(res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            txn.setCtype(res.getString(res.getColumnIndex(CATEGORY_TYPE)));
             transactions.add(txn);
             res.moveToNext();
         }

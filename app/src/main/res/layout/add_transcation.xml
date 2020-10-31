@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Add New Budget"
+        android:text="Add New Transaction"
         android:textColor="#000000"
         android:textSize="25dp"
         android:textStyle="bold"
@@ -25,14 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:text="Budget Amount:"
+        android:text="Transaction Amount:"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
         android:paddingLeft="10dp"/>
 
     <EditText
-        android:id="@+id/ET_budgetAmount"
+        android:id="@+id/ET_txnAmount"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -41,10 +41,10 @@
         android:inputType="number"/>
 
     <View
-    android:layout_width="match_parent"
-    android:layout_height="10dp"
-    android:background="@drawable/dotted"
-    android:layout_weight="0.25"/>
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/dotted"
+        android:layout_weight="0.25"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:gravity="center_vertical"/>
 
         <Spinner
-            android:id="@+id/SP_budgetCategory"
+            android:id="@+id/SP_txnCategory"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -82,35 +82,25 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:text="Month and Year:"
+        android:text="Note:"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
         android:paddingLeft="10dp"/>
 
-    <LinearLayout
+
+    <EditText
+        android:id="@+id/ET_txnNote"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:weightSum="2"
-        android:orientation="horizontal">
+        android:hint="Enter Note"
+        android:textSize="18dp"/>
 
-        <Spinner
-            android:id="@+id/SP_month"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
 
-        <Spinner
-            android:id="@+id/SP_year"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
 
     <Button
-        android:id="@+id/btn_addBudget"
+        android:id="@+id/btn_addTxn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"

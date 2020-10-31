@@ -2,7 +2,7 @@ package com.secretdevbd.dexian.dailybudget.DB;
 
 public class Transaction {
     int tid, cid, tamount, day, month, year;
-    String tnote;
+    String tnote, cname, ctype;
 
     public Transaction(int tid, int cid, int tamount, int day, int month, int year, String tnote) {
         this.tid = tid;
@@ -12,6 +12,22 @@ public class Transaction {
         this.month = month;
         this.year = year;
         this.tnote = tnote;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public String getCtype() {
+        return ctype;
+    }
+
+    public void setCtype(String ctype) {
+        this.ctype = ctype;
     }
 
     public int getTid() {

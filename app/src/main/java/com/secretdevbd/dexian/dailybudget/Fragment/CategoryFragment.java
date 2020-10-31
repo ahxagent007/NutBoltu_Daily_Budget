@@ -105,7 +105,7 @@ public class CategoryFragment extends Fragment {
         btn_addCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Name = ET_categoryName.getText().toString();
+                String Name = ET_categoryName.getText().toString().toUpperCase();
                 String type = SP_categoryType.getSelectedItem().toString();
 
                 if(Name.length()>0 && type.length()>0){
