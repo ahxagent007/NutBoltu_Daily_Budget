@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +35,12 @@ import com.secretdevbd.dexian.dailybudget.DB.DBhandler;
 import com.secretdevbd.dexian.dailybudget.ItemClickListener;
 import com.secretdevbd.dexian.dailybudget.R;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class BudgetFragment extends Fragment {
+    String TAG = "XIAN";
 
     RecyclerView RV_budgets;
     FloatingActionButton fab_addBudget;
@@ -46,6 +50,13 @@ public class BudgetFragment extends Fragment {
 
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mRecycleAdapter;
+
+
+    String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    int curr_month, curr_year;
+
+    int curr_nav = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,23 +68,63 @@ public class BudgetFragment extends Fragment {
         btn_budgetNext = view.findViewById(R.id.btn_budgetNext);
         TV_budgetTitle = view.findViewById(R.id.TV_budgetTitle);
 
-        ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgets();
+        curr_month = Calendar.getInstance().get(Calendar.MONTH);
+        curr_year = Calendar.getInstance().get(Calendar.YEAR);
+
+        generateBudgets(curr_month, curr_year);
+
+        fab_addBudget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addBudget();
+            }
+        });
+
+        btn_budgetBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curr_nav--;
+                if(curr_month+curr_nav<0){
+                    curr_month=11;
+                    curr_year--;
+                    curr_nav=0;
+                    generateBudgets(curr_month, curr_year);
+                }else {
+                    generateBudgets(curr_month+curr_nav, curr_year);
+                }
+            }
+        });
+        btn_budgetNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curr_nav++;
+                if(curr_month+curr_nav>11){
+                    curr_month=0;
+                    curr_year++;
+                    curr_nav=0;
+                    generateBudgets(curr_month, curr_year);
+                }else {
+                    generateBudgets(curr_month+curr_nav, curr_year);
+                }
+
+            }
+        });
+
+
+        return view;
+    }
+
+    public void generateBudgets(int month, int year){
+        TV_budgetTitle.setText("Budget ("+months[month]+"-"+year+")");
+
+        Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
+        ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(month+1, year);
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RV_budgets.setLayoutManager(mLayoutManager);
         mRecycleAdapter = new RecycleViewAdapterForBudgets(getContext(), budgets);
         RV_budgets.setAdapter(mRecycleAdapter);
-
-        fab_addBudget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        return view;
     }
-
 
     public class RecycleViewAdapterForBudgets extends RecyclerView.Adapter<RecycleViewAdapterForBudgets.ViewHolder> {
 
@@ -101,7 +152,7 @@ public class BudgetFragment extends Fragment {
         public void onBindViewHolder(RecycleViewAdapterForBudgets.ViewHolder viewHolder, final int i) {
 
             viewHolder.TV_catName.setText(budgets.get(i).getCname());
-            viewHolder.TV_catType.setText(budgets.get(i).getCtype());
+            viewHolder.TV_catType.setText(""+budgets.get(i).getBamount());
 
             if(budgets.get(i).getCtype().equals("Income")){
                 viewHolder.TV_catType.setTextColor(getResources().getColor(R.color.dark_green));
@@ -216,6 +267,7 @@ public class BudgetFragment extends Fragment {
     }
 
     private void addBudget(){
+
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -227,14 +279,16 @@ public class BudgetFragment extends Fragment {
 
 
         final EditText ET_budgetAmount;
-        final Spinner SP_budgetCategory;
+        final Spinner SP_budgetCategory, SP_month, SP_year;
         Button btn_addBudget;
 
         ET_budgetAmount = dialog.findViewById(R.id.ET_budgetAmount);
         SP_budgetCategory = dialog.findViewById(R.id.SP_budgetCategory);
         btn_addBudget = dialog.findViewById(R.id.btn_addBudget);
+        SP_month = dialog.findViewById(R.id.SP_month);
+        SP_year = dialog.findViewById(R.id.SP_year);
 
-        ArrayList<Category> categories = new DBhandler(getContext()).getAllCategories();
+        final ArrayList<Category> categories = new DBhandler(getContext()).getAllCategories();
         ArrayList<String> catnames = new ArrayList<String>();
         for (Category c:categories){
             catnames.add(c.getCname());
@@ -246,25 +300,57 @@ public class BudgetFragment extends Fragment {
         // attaching data adapter to spinner
         SP_budgetCategory.setAdapter(dataAdapter);
 
+        ArrayList<String> years = new ArrayList<String>();
+        int year_limit = curr_year+3;
+        for(int i=curr_year; i<year_limit; i++){
+            years.add(""+i);
+        }
+
+        final ArrayList<String> months_ = new ArrayList<String>();
+        for(int i=0; i<12; i++){
+            months_.add(months[(curr_month+i)%12]);
+        }
+
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, years);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SP_year.setAdapter(yearAdapter);
+
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, months_);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SP_month.setAdapter(monthAdapter);
+
         dialog.show();
 
 
         btn_addBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int amount = Integer.parseInt(ET_budgetAmount.getText().toString());
-                int id = SP_budgetCategory.getSelectedItemPosition();
+                int amount = 0;
+                if(!ET_budgetAmount.getText().toString().equals("")){
+                    amount = Integer.parseInt(ET_budgetAmount.getText().toString());
+                }
+                int cat_id = SP_budgetCategory.getSelectedItemPosition();
+                String sel_month = SP_month.getSelectedItem().toString();
+                int sel_year = Integer.parseInt(SP_year.getSelectedItem().toString());
+                int int_month = -1;
+                for(int i=0; i<12; i++){
+                    if(sel_month.equals(months[i])){
+                        Log.i(TAG, i+" sel_month.equals(months[i]) "+  months[i]);
+                        int_month = i+1;
+                    }
+                }
+                Log.i(TAG, "MONTH : "+int_month+" YEAR : "+sel_year);
 
                 if(amount>0){
                     DBhandler DBH = new DBhandler(getActivity().getApplicationContext());
-                    //DBH.addBudget();
+                    DBH.addBudget(categories.get(cat_id).getCid(), amount, int_month, sel_year);
 
                     Toast.makeText(getActivity().getApplicationContext(), "Budget Added", Toast.LENGTH_SHORT).show();
                     dialog.cancel();
 
                     reloadFragment();
                 }else{
-                    Toast.makeText(getActivity().getApplicationContext(), "Please enter amount.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Please Enter Correct Amount.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

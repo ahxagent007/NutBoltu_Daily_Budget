@@ -82,18 +82,32 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:text="Month:"
+        android:text="Month and Year:"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
         android:paddingLeft="10dp"/>
 
-    <DatePicker
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/SP_month"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/SP_year"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_addBudget"

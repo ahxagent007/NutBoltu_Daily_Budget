@@ -141,8 +141,29 @@ public class DBhandler extends SQLiteOpenHelper {
         ArrayList<Budget> budgets = new ArrayList<Budget>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT BUDGET.bid, BUDGET.cid, BUDGET.amount, BUDGET.byear, BUDGET.bmonth,  CATEGORY.ctype, CATEGORY.cname " +
+        Cursor res = db.rawQuery("SELECT BUDGET.bid, BUDGET.cid, BUDGET.bamount, BUDGET.byear, BUDGET.bmonth,  CATEGORY.ctype, CATEGORY.cname " +
                 "FROM " + BUDGET_TABLE_NAME +" JOIN "+CATEGORY_TABLE_NAME+" ON "+BUDGET_TABLE_NAME+"."+BUDGET_CID+" = "+CATEGORY_TABLE_NAME+"."+CATEGORY_ID, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Budget bgt = new Budget(res.getInt(res.getColumnIndex(BUDGET_ID)), res.getInt(res.getColumnIndex(BUDGET_CID)),
+                    res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex(BUDGET_YEAR)), res.getInt(res.getColumnIndex(BUDGET_MONTH)) );
+            bgt.setCname(res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            bgt.setCtype(res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            budgets.add(bgt);
+
+            res.moveToNext();
+        }
+        return budgets;
+    }
+
+    public ArrayList<Budget> getAllBudgetsbyMonthYear(int month, int year) {
+        ArrayList<Budget> budgets = new ArrayList<Budget>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT BUDGET.bid, BUDGET.cid, BUDGET.bamount, BUDGET.byear, BUDGET.bmonth,  CATEGORY.ctype, CATEGORY.cname " +
+                "FROM " + BUDGET_TABLE_NAME +" JOIN "+CATEGORY_TABLE_NAME+" ON "+BUDGET_TABLE_NAME+"."+BUDGET_CID+" = "+CATEGORY_TABLE_NAME+"."+CATEGORY_ID+" " +
+                "WHERE BUDGET.bmonth = "+month+" AND BUDGET.byear = "+year, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {

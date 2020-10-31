@@ -45,8 +45,9 @@
                 android:textColor="@color/red"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="3dp"/>
+                android:gravity="end"
+                android:padding="5dp"
+                android:layout_marginRight="10dp"/>
 
 
         </LinearLayout>
