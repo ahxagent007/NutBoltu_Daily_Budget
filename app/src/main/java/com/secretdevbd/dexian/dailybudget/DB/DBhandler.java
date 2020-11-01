@@ -122,7 +122,7 @@ public class DBhandler extends SQLiteOpenHelper {
         contentValues.put(TRANSACTION_DAY, month);
         contentValues.put(TRANSACTION_MONTH, month);
         contentValues.put(TRANSACTION_YEAR, year);
-        contentValues.put(TRANSACTION_NOTE, month);
+        contentValues.put(TRANSACTION_NOTE, note);
 
         db.insert(TRANSACTION_TABLE_NAME, null, contentValues);
         return true;
