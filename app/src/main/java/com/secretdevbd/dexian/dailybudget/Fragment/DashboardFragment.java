@@ -74,22 +74,59 @@ public class DashboardFragment extends Fragment {
 
         generateTransactions(curr_month, curr_year);
 
-
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curr_nav--;
+                if(curr_month+curr_nav<0){
+                    curr_month=11;
+                    curr_year--;
+                    curr_nav=0;
+                    generateTransactions(curr_month, curr_year);
+                }else {
+                    generateTransactions(curr_month+curr_nav, curr_year);
+                }
+            }
+        });
+        btn_forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curr_nav++;
+                if(curr_month+curr_nav>11){
+                    curr_month=0;
+                    curr_year++;
+                    curr_nav=0;
+                    generateTransactions(curr_month, curr_year);
+                }else {
+                    generateTransactions(curr_month+curr_nav, curr_year);
+                }
+            }
+        });
 
         return view;
 
     }
 
     public void generateTransactions(final int month, final int year){
+        Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
+
+        DBhandler DBH = new DBhandler(getContext());
+
+        final int income = DBH.getTotalIncome(month+1, year);
+        final int expense = DBH.getTotalExpense(month+1, year);
+        final int balance = income-expense;
+
         new Handler().post(new Runnable() {
             @Override
             public void run() {
                 TV_monthYear.setText("Transactions ("+months[month]+"-"+year+")");
+                TV_income.setText(""+income);
+                TV_expense.setText(""+expense);
+                TV_balance.setText(""+balance);
             }
         });
 
-        Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
-        ArrayList<BudgetSatus> budgetSatuses = null;
+        ArrayList<BudgetSatus> budgetSatuses = DBH.getBudgetStatus(month+1, year);
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RV_budgetStatus.setLayoutManager(mLayoutManager);
@@ -120,13 +157,13 @@ public class DashboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(RecycleViewAdapterForBudgetStatus.ViewHolder viewHolder, final int i) {
 
-            viewHolder.TV_catName.setText(budgetSatuses.get(i).getCname()+" : "+transactions.get(i).getTnote());
+            viewHolder.TV_catName.setText(budgetSatuses.get(i).getBudgetName()+" ["+budgetSatuses.get(i).getBudgetAmount()+"]["+budgetSatuses.get(i).getBudgetGet()+"]");
 
-            if(budgetSatuses.get(i).getCtype().equals("Income")){
-                viewHolder.TV_catType.setText("+"+budgetSatuses.get(i).getTamount());
+            if(budgetSatuses.get(i).getBudgetBalance()>0){
+                viewHolder.TV_catType.setText(""+budgetSatuses.get(i).getBudgetBalance());
                 viewHolder.TV_catType.setTextColor(getResources().getColor(R.color.dark_green));
             }else {
-                viewHolder.TV_catType.setText("-"+budgetSatuses.get(i).getTamount());
+                viewHolder.TV_catType.setText(""+budgetSatuses.get(i).getBudgetBalance());
 
             }
             viewHolder.IV_cat.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_green));

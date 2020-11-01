@@ -39,6 +39,8 @@ import com.secretdevbd.dexian.dailybudget.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 
 public class TransactionFragment extends Fragment {
     String TAG = "XIAN";
@@ -67,7 +69,7 @@ public class TransactionFragment extends Fragment {
         TV_txnTitle = view.findViewById(R.id.TV_txnTitle);
         fab_addTxn = view.findViewById(R.id.fab_addTxn);
 
-        curr_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        curr_day = Calendar.getInstance().get(Calendar.DATE);
         curr_month = Calendar.getInstance().get(Calendar.MONTH);
         curr_year = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -123,6 +125,7 @@ public class TransactionFragment extends Fragment {
 
         Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
         ArrayList<Transaction> transactions = new DBhandler(getContext()).getAllTransactionsByDate(month+1, year);
+        Collections.reverse(transactions);
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RV_transactions.setLayoutManager(mLayoutManager);
@@ -155,6 +158,8 @@ public class TransactionFragment extends Fragment {
         @Override
         public void onBindViewHolder(RecycleViewAdapterForTransaction.ViewHolder viewHolder, final int i) {
 
+
+
             viewHolder.TV_catName.setText(transactions.get(i).getCname()+" : "+transactions.get(i).getTnote());
 
             if(transactions.get(i).getCtype().equals("Income")){
@@ -172,6 +177,7 @@ public class TransactionFragment extends Fragment {
                     if (isLongClick) {
 
                     } else {
+                        Log.i(TAG, "TRANSACTIONS : "+transactions.get(i).getDay()+" : "+transactions.get(i).getMonth()+" : "+transactions.get(i).getYear());
                     }
                 }
             });
@@ -322,6 +328,7 @@ public class TransactionFragment extends Fragment {
 
                 if(amount>0){
                     DBhandler DBH = new DBhandler(getActivity().getApplicationContext());
+
                     DBH.addTransaction(categories.get(cat_id).getCid(), amount, curr_day, curr_month+1, curr_year, note);
 
                     Toast.makeText(getActivity().getApplicationContext(), "Transaction Added", Toast.LENGTH_SHORT).show();

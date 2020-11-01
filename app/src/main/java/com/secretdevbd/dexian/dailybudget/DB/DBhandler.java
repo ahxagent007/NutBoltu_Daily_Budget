@@ -119,7 +119,7 @@ public class DBhandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TRANSACTION_CID, cid);
         contentValues.put(TRANSACTION_AMOUNT, amount);
-        contentValues.put(TRANSACTION_DAY, month);
+        contentValues.put(TRANSACTION_DAY, day);
         contentValues.put(TRANSACTION_MONTH, month);
         contentValues.put(TRANSACTION_YEAR, year);
         contentValues.put(TRANSACTION_NOTE, note);
@@ -157,6 +157,25 @@ public class DBhandler extends SQLiteOpenHelper {
         return budgets;
     }
 
+    public ArrayList<Budget> getTotalBudgets(int month, int year) {
+        ArrayList<Budget> budgets = new ArrayList<Budget>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( "SELECT SUM(BUDGET.bamount) as bamount, BUDGET.bid, BUDGET.cid, BUDGET.bmonth, BUDGET.byear, CATEGORY.ctype, CATEGORY.cname FROM BUDGET JOIN CATEGORY ON BUDGET.cid = CATEGORY.cid WHERE BUDGET.bmonth = "+month+" and BUDGET.byear = "+year+" GROUP by BUDGET.cid, BUDGET.bmonth, BUDGET.byear",null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Budget bgt = new Budget(res.getInt(res.getColumnIndex(BUDGET_ID)), res.getInt(res.getColumnIndex(BUDGET_CID)),
+                    res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex(BUDGET_YEAR)), res.getInt(res.getColumnIndex(BUDGET_MONTH)) );
+            bgt.setCname(res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            bgt.setCtype(res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            budgets.add(bgt);
+
+            res.moveToNext();
+        }
+        return budgets;
+    }
+
     public ArrayList<Budget> getAllBudgetsbyMonthYear(int month, int year) {
         ArrayList<Budget> budgets = new ArrayList<Budget>();
 
@@ -164,6 +183,27 @@ public class DBhandler extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT BUDGET.bid, BUDGET.cid, BUDGET.bamount, BUDGET.byear, BUDGET.bmonth,  CATEGORY.ctype, CATEGORY.cname " +
                 "FROM " + BUDGET_TABLE_NAME +" JOIN "+CATEGORY_TABLE_NAME+" ON "+BUDGET_TABLE_NAME+"."+BUDGET_CID+" = "+CATEGORY_TABLE_NAME+"."+CATEGORY_ID+" " +
                 "WHERE BUDGET.bmonth = "+month+" AND BUDGET.byear = "+year, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Budget bgt = new Budget(res.getInt(res.getColumnIndex(BUDGET_ID)), res.getInt(res.getColumnIndex(BUDGET_CID)),
+                    res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex(BUDGET_YEAR)), res.getInt(res.getColumnIndex(BUDGET_MONTH)) );
+            bgt.setCname(res.getString(res.getColumnIndex(CATEGORY_NAME)));
+            bgt.setCtype(res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            budgets.add(bgt);
+
+            res.moveToNext();
+        }
+        return budgets;
+    }
+
+    public ArrayList<Budget> getBudgetsByCategory(int cid) {
+        ArrayList<Budget> budgets = new ArrayList<Budget>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT BUDGET.bid, BUDGET.cid, BUDGET.bamount, BUDGET.byear, BUDGET.bmonth,  CATEGORY.ctype, CATEGORY.cname " +
+                "FROM " + BUDGET_TABLE_NAME +" JOIN "+CATEGORY_TABLE_NAME+" ON "+BUDGET_TABLE_NAME+"."+BUDGET_CID+" = "+CATEGORY_TABLE_NAME+"."+CATEGORY_ID+ " " +
+                "WHERE BUDGET.cid = "+cid, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
@@ -275,6 +315,67 @@ public class DBhandler extends SQLiteOpenHelper {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public ArrayList<BudgetSatus> getBudgetStatus(int month, int year){
+        ArrayList<BudgetSatus> budgetSatuses = new ArrayList<BudgetSatus>();
+
+        //QUERY PROBLEM
+        String sql_qury = "SELECT SUM(BUDGET.bamount) as bamount, SUM(TRANSACTION_TABLE.tamount) AS get, BUDGET.bid, BUDGET.cid, BUDGET.bmonth, \n" +
+                "BUDGET.byear, CATEGORY.ctype, CATEGORY.cname " +
+                "FROM BUDGET " +
+                "JOIN CATEGORY ON BUDGET.cid = CATEGORY.cid " +
+                "JOIN TRANSACTION_TABLE ON BUDGET.cid = TRANSACTION_TABLE.cid " +
+                "WHERE BUDGET.bmonth = "+month+" and BUDGET.byear = " +year+
+                " AND TRANSACTION_TABLE.tmonth = "+month+" AND TRANSACTION_TABLE.tyear = " +year+
+                " GROUP by BUDGET.cid, BUDGET.bmonth, BUDGET.byear";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( sql_qury,null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            BudgetSatus bgt = new BudgetSatus();
+            if(res.getString(res.getColumnIndex(CATEGORY_TYPE)).equals("Income")){
+                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex("get")),
+                        res.getInt(res.getColumnIndex("get"))-res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            }else{
+                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex("get")),
+                        res.getInt(res.getColumnIndex(BUDGET_AMOUNT))-res.getInt(res.getColumnIndex("get")), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            }
+            budgetSatuses.add(bgt);
+            res.moveToNext();
+        }
+        return budgetSatuses;
+    }
+    public int getTotalIncome(int month, int year){
+
+        String sql_qury = "SELECT SUM(TRANSACTION_TABLE.tamount) as total_income FROM TRANSACTION_TABLE " +
+                "JOIN CATEGORY ON CATEGORY.cid = TRANSACTION_TABLE.cid " +
+                "WHERE CATEGORY.ctype = \"Income\" AND TRANSACTION_TABLE.tmonth = "+month+" AND TRANSACTION_TABLE.tyear = "+year+";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( sql_qury,null);
+        res.moveToFirst();
+
+        int income = res.getInt(res.getColumnIndex("total_income"));
+
+        return income;
+    }
+
+    public int getTotalExpense(int month, int year){
+
+        String sql_qury = "SELECT SUM(TRANSACTION_TABLE.tamount) as total_expense FROM TRANSACTION_TABLE " +
+                "JOIN CATEGORY ON CATEGORY.cid = TRANSACTION_TABLE.cid " +
+                "WHERE CATEGORY.ctype = \"Expense\" AND TRANSACTION_TABLE.tmonth = "+month+" AND TRANSACTION_TABLE.tyear = "+year+";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery( sql_qury,null);
+        res.moveToFirst();
+
+        int income = res.getInt(res.getColumnIndex("total_expense"));
+
+        return income;
     }
 
 

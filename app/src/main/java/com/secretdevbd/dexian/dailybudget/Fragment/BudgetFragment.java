@@ -39,6 +39,7 @@ import com.secretdevbd.dexian.dailybudget.R;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class BudgetFragment extends Fragment {
     String TAG = "XIAN";
@@ -125,6 +126,7 @@ public class BudgetFragment extends Fragment {
 
         Log.i(TAG, "MONTH : "+month+" YEAR : "+year);
         ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(month+1, year);
+        Collections.reverse(budgets);
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RV_budgets.setLayoutManager(mLayoutManager);
