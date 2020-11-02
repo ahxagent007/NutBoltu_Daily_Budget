@@ -321,14 +321,20 @@ public class DBhandler extends SQLiteOpenHelper {
         ArrayList<BudgetSatus> budgetSatuses = new ArrayList<BudgetSatus>();
 
         //QUERY PROBLEM
-        String sql_qury = "SELECT SUM(BUDGET.bamount) as bamount, SUM(TRANSACTION_TABLE.tamount) AS get, BUDGET.bid, BUDGET.cid, BUDGET.bmonth, \n" +
-                "BUDGET.byear, CATEGORY.ctype, CATEGORY.cname " +
-                "FROM BUDGET " +
-                "JOIN CATEGORY ON BUDGET.cid = CATEGORY.cid " +
-                "JOIN TRANSACTION_TABLE ON BUDGET.cid = TRANSACTION_TABLE.cid " +
-                "WHERE BUDGET.bmonth = "+month+" and BUDGET.byear = " +year+
-                " AND TRANSACTION_TABLE.tmonth = "+month+" AND TRANSACTION_TABLE.tyear = " +year+
-                " GROUP by BUDGET.cid, BUDGET.bmonth, BUDGET.byear";
+        String sql_qury = "SELECT a.total_amount, b.total_txn, a.cid, a.bid,  b.tid, b.tday, c.ctype, c.cname " +
+                " FROM (SELECT SUM(bamount) AS total_amount, cid, bid, bmonth, byear " +
+                "    FROM BUDGET " +
+                "    WHERE " +
+                "    bmonth = "+month+" AND byear = "+year+" " +
+                "    GROUP By cid) AS a  " +
+                "JOIN (SELECT SUM(tamount) AS total_txn, tid, tday, cid " +
+                "  FROM TRANSACTION_TABLE\n" +
+                "  WHERE tmonth = "+month+" AND tyear = "+year+" " +
+                "  GROUP BY cid) as b  " +
+                "ON a.cid=b.cid " +
+                "JOIN CATEGORY as c ON c.cid = a.cid " +
+                "WHERE a.bmonth = "+month+" AND a.byear = "+year;
+
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery( sql_qury,null);
@@ -337,11 +343,11 @@ public class DBhandler extends SQLiteOpenHelper {
         while (res.isAfterLast() == false) {
             BudgetSatus bgt = new BudgetSatus();
             if(res.getString(res.getColumnIndex(CATEGORY_TYPE)).equals("Income")){
-                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex("get")),
-                        res.getInt(res.getColumnIndex("get"))-res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex("total_amount")), res.getInt(res.getColumnIndex("total_txn")),
+                        res.getInt(res.getColumnIndex("total_txn"))-res.getInt(res.getColumnIndex("total_amount")), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
             }else{
-                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex(BUDGET_AMOUNT)), res.getInt(res.getColumnIndex("get")),
-                        res.getInt(res.getColumnIndex(BUDGET_AMOUNT))-res.getInt(res.getColumnIndex("get")), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+                bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex("total_amount")), res.getInt(res.getColumnIndex("total_txn")),
+                        res.getInt(res.getColumnIndex("total_amount"))-res.getInt(res.getColumnIndex("total_txn")), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
             }
             budgetSatuses.add(bgt);
             res.moveToNext();
