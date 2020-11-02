@@ -301,6 +301,7 @@ public class BudgetFragment extends Fragment {
         for (Category c:categories){
             catnames.add(c.getCname());
         }
+
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, catnames);
         // Drop down layout style - list view with radio button
@@ -329,6 +330,10 @@ public class BudgetFragment extends Fragment {
 
         dialog.show();
 
+        if(categories.size()==0){
+            Toast.makeText(getContext(), "Please add Category First !!", Toast.LENGTH_LONG).show();
+            dialog.cancel();
+        }
 
         btn_addBudget.setOnClickListener(new View.OnClickListener() {
             @Override

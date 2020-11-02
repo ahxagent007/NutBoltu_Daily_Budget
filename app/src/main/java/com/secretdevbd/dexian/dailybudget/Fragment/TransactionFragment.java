@@ -305,6 +305,7 @@ public class TransactionFragment extends Fragment {
         for (Category c:categories){
             catnames.add(c.getCname());
         }
+
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, catnames);
         // Drop down layout style - list view with radio button
@@ -313,6 +314,18 @@ public class TransactionFragment extends Fragment {
         SP_txnCategory.setAdapter(dataAdapter);
 
         dialog.show();
+
+        if(categories.size()==0){
+            Toast.makeText(getContext(), "Please add Category First !!", Toast.LENGTH_LONG).show();
+            dialog.cancel();
+        }else{
+            ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(curr_month, curr_year);
+            if(budgets.size() == 0){
+                Toast.makeText(getContext(), "Please add Budget of this Month First !!", Toast.LENGTH_LONG).show();
+                dialog.cancel();
+            }
+        }
+
 
 
         btn_addTxn.setOnClickListener(new View.OnClickListener() {
