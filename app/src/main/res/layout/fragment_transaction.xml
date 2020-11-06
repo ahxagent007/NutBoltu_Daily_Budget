@@ -37,6 +37,7 @@
                 android:id="@+id/TV_txnTitle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/rajdhani_medium"
                 android:text="Transaction"
                 android:textColor="#000000"
                 android:textSize="20dp"

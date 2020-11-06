@@ -11,6 +11,7 @@
         android:text="Add New Transaction"
         android:textColor="#000000"
         android:textSize="25dp"
+        android:fontFamily="@font/rajdhani_medium"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="3dp"
@@ -26,6 +27,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:text="Transaction Amount:"
+        android:fontFamily="@font/rajdhani_medium"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -34,6 +36,7 @@
     <EditText
         android:id="@+id/ET_txnAmount"
         android:layout_width="match_parent"
+        android:fontFamily="@font/rajdhani_medium"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:hint="Amount"
@@ -58,6 +61,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Category:"
+            android:fontFamily="@font/rajdhani_medium"
             android:textStyle="bold"
             android:textSize="20dp"
             android:textColor="#000000"
@@ -68,6 +72,7 @@
             android:id="@+id/SP_txnCategory"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:fontFamily="@font/rajdhani_medium"
             android:layout_weight="1"
             android:gravity="center_vertical"/>
 
@@ -83,6 +88,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:text="Note:"
+        android:fontFamily="@font/rajdhani_medium"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -94,6 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:fontFamily="@font/rajdhani_medium"
         android:hint="Enter Note"
         android:textSize="18dp"/>
 
@@ -104,6 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:fontFamily="@font/rajdhani_medium"
         android:layout_gravity="center"
         android:text="Add"/>
 

@@ -12,6 +12,7 @@
         android:textColor="#000000"
         android:textSize="25dp"
         android:textStyle="bold"
+        android:fontFamily="@font/rajdhani_medium"
         android:gravity="center"
         android:padding="3dp"
         android:layout_weight="0.75"/>
@@ -25,15 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
+        android:fontFamily="@font/rajdhani_medium"
+        android:paddingLeft="10dp"
         android:text="Budget Amount:"
-        android:textStyle="bold"
-        android:textSize="20dp"
         android:textColor="#000000"
-        android:paddingLeft="10dp"/>
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/ET_budgetAmount"
         android:layout_width="match_parent"
+        android:fontFamily="@font/rajdhani_medium"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:hint="Amount"
@@ -58,6 +61,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Category:"
+            android:fontFamily="@font/rajdhani_medium"
             android:textStyle="bold"
             android:textSize="20dp"
             android:textColor="#000000"
@@ -69,7 +73,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:fontFamily="@font/rajdhani_medium"/>
 
     </LinearLayout>
     <View
@@ -83,6 +88,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:text="Month and Year:"
+        android:fontFamily="@font/rajdhani_medium"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -99,12 +105,14 @@
             android:id="@+id/SP_month"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:fontFamily="@font/rajdhani_medium"
             android:layout_weight="1"/>
 
         <Spinner
             android:id="@+id/SP_year"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:fontFamily="@font/rajdhani_medium"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -115,6 +123,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
+        android:fontFamily="@font/rajdhani_medium"
         android:text="Add"/>
 
 

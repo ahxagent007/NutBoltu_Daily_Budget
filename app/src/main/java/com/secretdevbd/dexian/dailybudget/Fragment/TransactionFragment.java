@@ -319,7 +319,7 @@ public class TransactionFragment extends Fragment {
             Toast.makeText(getContext(), "Please add Category First !!", Toast.LENGTH_LONG).show();
             dialog.cancel();
         }else{
-            ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(curr_month, curr_year);
+            ArrayList<Budget> budgets = new DBhandler(getContext()).getAllBudgetsbyMonthYear(curr_month+1, curr_year);
             if(budgets.size() == 0){
                 Toast.makeText(getContext(), "Please add Budget of this Month First !!", Toast.LENGTH_LONG).show();
                 dialog.cancel();

@@ -39,6 +39,7 @@
                 android:layout_height="match_parent"
                 android:text="Current Budget"
                 android:textColor="#000000"
+                android:fontFamily="@font/rajdhani_medium"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:gravity="center"
