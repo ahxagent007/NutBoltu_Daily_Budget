@@ -110,7 +110,8 @@
         android:id="@+id/btn_addTxn"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight=".5"
+        android:background="@drawable/pressed_green"
         android:fontFamily="@font/rajdhani_medium"
         android:layout_gravity="center"
         android:text="Add"/>

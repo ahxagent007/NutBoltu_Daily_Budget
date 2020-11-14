@@ -265,6 +265,23 @@ public class DBhandler extends SQLiteOpenHelper {
         return transactions;
     }
 
+    public ArrayList<Transaction> getAllTransactionsbyCategory(int cid) {
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME + " WHERE "+TRANSACTION_CID +" = "+cid, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
+                    res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            transactions.add(txn);
+            res.moveToNext();
+        }
+        return transactions;
+    }
+
     public ArrayList<Transaction> getAllTransactionsByDate(int month, int year) {
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
@@ -317,6 +334,28 @@ public class DBhandler extends SQLiteOpenHelper {
         }
     }
 
+    public boolean deleteTransaction(int id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try{
+            db.execSQL("DELETE FROM " + TRANSACTION_TABLE_NAME + " WHERE "+TRANSACTION_ID+ " = "+id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean deleteBudget(int id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try{
+            db.execSQL("DELETE FROM " + BUDGET_TABLE_NAME + " WHERE "+BUDGET_ID+ " = "+id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     public ArrayList<BudgetSatus> getBudgetStatus(int month, int year){
         ArrayList<BudgetSatus> budgetSatuses = new ArrayList<BudgetSatus>();
 
@@ -354,6 +393,7 @@ public class DBhandler extends SQLiteOpenHelper {
         }
         return budgetSatuses;
     }
+
     public int getTotalIncome(int month, int year){
 
         String sql_qury = "SELECT SUM(TRANSACTION_TABLE.tamount) as total_income FROM TRANSACTION_TABLE " +

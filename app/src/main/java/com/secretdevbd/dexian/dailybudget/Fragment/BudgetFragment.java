@@ -172,6 +172,37 @@ public class BudgetFragment extends Fragment {
                 public void onClick(View view, final int position, boolean isLongClick) {
                     if (isLongClick) {
 
+                        AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getContext());
+                        //Uncomment the below code to Set the message and title from the strings.xml file
+                        builder.setMessage("Do you want to delete this Budget ?").setTitle("Delete Budget");
+
+                        //Setting message manually and performing action on button click
+                        builder.setMessage("Do you want to delete this Budget ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        DBhandler DBH = new DBhandler(getContext());
+                                        DBH.deleteBudget(budgets.get(position).getBid());
+                                        dialog.cancel();
+                                        Toast.makeText(getContext(),"Budget Deleted",
+                                                Toast.LENGTH_SHORT).show();
+                                        reloadFragment();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //  Action for 'NO' Button
+                                        dialog.cancel();
+                                    }
+                                });
+                        //Creating dialog box
+                        AlertDialog alert = builder.create();
+                        //Setting the title manually
+                        alert.setTitle("Delete Budget !");
+                        alert.show();
+                        reloadFragment();
+
                     } else {
                     }
                 }

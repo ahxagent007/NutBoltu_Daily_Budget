@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_addCat"
+        android:id="@+id/fab_addBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
@@ -18,17 +18,27 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="Heads"
-            android:textColor="#000000"
-            android:fontFamily="@font/rajdhani_medium"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:padding="3dp"
-            android:layout_weight="0.75"/>
+            android:layout_weight="0.75"
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <TextView
+                android:id="@+id/TV_budgetStatus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Budget Status"
+                android:textColor="#000000"
+                android:fontFamily="@font/rajdhani_medium"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_weight="10"/>
+        </LinearLayout>
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
@@ -36,7 +46,7 @@
             android:layout_weight="0.25"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RV_categories"
+            android:id="@+id/RV_budgetStatus"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9"/>

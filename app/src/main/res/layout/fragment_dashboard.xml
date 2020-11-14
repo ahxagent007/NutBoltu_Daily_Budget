@@ -209,7 +209,7 @@
         android:layout_weight="2"
         android:orientation="horizontal"
         android:weightSum="10"
-        android:background="@color/lime">
+        android:background="@color/lite_grey">
 
         <Button
             android:id="@+id/btn_back"

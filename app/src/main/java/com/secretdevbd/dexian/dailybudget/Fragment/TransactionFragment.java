@@ -175,6 +175,36 @@ public class TransactionFragment extends Fragment {
                 @Override
                 public void onClick(View view, final int position, boolean isLongClick) {
                     if (isLongClick) {
+                        AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getContext());
+                        //Uncomment the below code to Set the message and title from the strings.xml file
+                        builder.setMessage("Do you want to delete this Transaction ?").setTitle("Delete Transaction");
+
+                        //Setting message manually and performing action on button click
+                        builder.setMessage("Do you want to delete this Transaction ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        DBhandler DBH = new DBhandler(getContext());
+                                        DBH.deleteTransaction(transactions.get(position).getTid());
+                                        dialog.cancel();
+                                        Toast.makeText(getContext(),"Transaction Deleted",
+                                                Toast.LENGTH_SHORT).show();
+                                        reloadFragment();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //  Action for 'NO' Button
+                                        dialog.cancel();
+                                    }
+                                });
+                        //Creating dialog box
+                        AlertDialog alert = builder.create();
+                        //Setting the title manually
+                        alert.setTitle("Delete Transaction !");
+                        alert.show();
+                        reloadFragment();
 
                     } else {
                         Log.i(TAG, "TRANSACTIONS : "+transactions.get(i).getDay()+" : "+transactions.get(i).getMonth()+" : "+transactions.get(i).getYear());

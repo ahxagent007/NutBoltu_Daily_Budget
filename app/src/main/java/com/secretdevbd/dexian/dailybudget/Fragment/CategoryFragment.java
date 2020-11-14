@@ -198,17 +198,17 @@ public class CategoryFragment extends Fragment {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getContext());
                         //Uncomment the below code to Set the message and title from the strings.xml file
-                        builder.setMessage("Do you want to delete this Category ?").setTitle("Delete Category");
+                        builder.setMessage("Do you want to delete this Head ?").setTitle("Delete Head");
 
                         //Setting message manually and performing action on button click
-                        builder.setMessage("Do you want to delete this Category ?")
+                        builder.setMessage("Do you want to delete this Head ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         DBhandler DBH = new DBhandler(getContext());
                                         DBH.deleteCategory(categories.get(position).getCid());
                                         dialog.cancel();
-                                        Toast.makeText(getContext(),"Category Deleted",
+                                        Toast.makeText(getContext(),"Head Deleted",
                                                 Toast.LENGTH_SHORT).show();
                                         reloadFragment();
                                     }
@@ -222,8 +222,10 @@ public class CategoryFragment extends Fragment {
                         //Creating dialog box
                         AlertDialog alert = builder.create();
                         //Setting the title manually
-                        alert.setTitle("Delete Category !");
+                        alert.setTitle("Delete Head !");
                         alert.show();
+
+                        reloadFragment();
                     } else {
                     }
                 }

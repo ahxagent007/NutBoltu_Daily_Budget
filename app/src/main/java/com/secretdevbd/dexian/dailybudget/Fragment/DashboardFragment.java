@@ -119,7 +119,7 @@ public class DashboardFragment extends Fragment {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                TV_monthYear.setText("Transactions ("+months[month]+"-"+year+")");
+                TV_monthYear.setText(months[month]+"-"+year);
                 TV_income.setText(""+income);
                 TV_expense.setText(""+expense);
                 TV_balance.setText(""+balance);
@@ -174,6 +174,8 @@ public class DashboardFragment extends Fragment {
                     if (isLongClick) {
 
                     } else {
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new BudgetStatusDetailsFragment()).commit();
                     }
                 }
             });
