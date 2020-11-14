@@ -52,7 +52,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
         }else{
-            super.onBackPressed();
+
+            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+                super.onBackPressed();
+            }else{
+                getSupportFragmentManager().popBackStack();
+            }
+
         }
     }
 

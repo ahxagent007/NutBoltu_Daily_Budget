@@ -6,6 +6,7 @@ public class BudgetSatus {
     int budgetGet;
     int budgetBalance;
     String budgetType;
+    int catID;
 
     public BudgetSatus(String budgetName, int budgetAmount, int budgetGet, int budgetBalance, String budgetType) {
         this.budgetName = budgetName;
@@ -16,6 +17,14 @@ public class BudgetSatus {
     }
 
     public BudgetSatus() {
+    }
+
+    public int getCatID() {
+        return catID;
+    }
+
+    public void setCatID(int catID) {
+        this.catID = catID;
     }
 
     public String getBudgetName() {

@@ -174,8 +174,19 @@ public class DashboardFragment extends Fragment {
                     if (isLongClick) {
 
                     } else {
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new BudgetStatusDetailsFragment()).commit();
+                        //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BudgetStatusDetailsFragment()).commit();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("ID", budgetSatuses.get(position).getCatID());
+                        Log.i(TAG, "CID = "+budgetSatuses.get(position).getCatID());
+
+                        BudgetStatusDetailsFragment nextFrag = new BudgetStatusDetailsFragment();
+                        nextFrag.setArguments(bundle);
+
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, nextFrag, "BudgetStatus")
+                                .addToBackStack(null)
+                                .commit();
                     }
                 }
             });

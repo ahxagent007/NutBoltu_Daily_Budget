@@ -269,13 +269,15 @@ public class DBhandler extends SQLiteOpenHelper {
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME + " WHERE "+TRANSACTION_CID +" = "+cid, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME + " JOIN CATEGORY ON CATEGORY.cid = TRANSACTION_TABLE.cid WHERE TRANSACTION_TABLE.cid = "+cid, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
             Transaction txn = new Transaction(res.getInt(res.getColumnIndex(TRANSACTION_ID)),res.getInt(res.getColumnIndex(TRANSACTION_CID)),
                     res.getInt(res.getColumnIndex(TRANSACTION_AMOUNT)),res.getInt(res.getColumnIndex(TRANSACTION_DAY)),res.getInt(res.getColumnIndex(TRANSACTION_MONTH)),
                     res.getInt(res.getColumnIndex(TRANSACTION_YEAR)),res.getString(res.getColumnIndex(TRANSACTION_NOTE)));
+            txn.setCtype(res.getString(res.getColumnIndex(CATEGORY_TYPE)));
+            txn.setCname(res.getString(res.getColumnIndex(CATEGORY_NAME)));
             transactions.add(txn);
             res.moveToNext();
         }
@@ -388,6 +390,7 @@ public class DBhandler extends SQLiteOpenHelper {
                 bgt = new BudgetSatus(res.getString(res.getColumnIndex(CATEGORY_NAME)), res.getInt(res.getColumnIndex("total_amount")), res.getInt(res.getColumnIndex("total_txn")),
                         res.getInt(res.getColumnIndex("total_amount"))-res.getInt(res.getColumnIndex("total_txn")), res.getString(res.getColumnIndex(CATEGORY_TYPE)));
             }
+            bgt.setCatID(res.getInt(res.getColumnIndex("cid")));
             budgetSatuses.add(bgt);
             res.moveToNext();
         }
