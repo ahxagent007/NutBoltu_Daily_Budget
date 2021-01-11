@@ -265,11 +265,11 @@ public class DBhandler extends SQLiteOpenHelper {
         return transactions;
     }
 
-    public ArrayList<Transaction> getAllTransactionsbyCategory(int cid) {
+    public ArrayList<Transaction> getAllTransactionsbyCategory(int cid, int month) {
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME + " JOIN CATEGORY ON CATEGORY.cid = TRANSACTION_TABLE.cid WHERE TRANSACTION_TABLE.cid = "+cid, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TRANSACTION_TABLE_NAME + " JOIN CATEGORY ON CATEGORY.cid = TRANSACTION_TABLE.cid WHERE TRANSACTION_TABLE.cid = "+cid+ " AND tmonth = "+month, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {

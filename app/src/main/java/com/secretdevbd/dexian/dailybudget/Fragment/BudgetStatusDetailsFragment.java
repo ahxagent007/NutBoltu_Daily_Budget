@@ -28,6 +28,7 @@ import com.secretdevbd.dexian.dailybudget.ItemClickListener;
 import com.secretdevbd.dexian.dailybudget.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 
 
@@ -67,8 +68,8 @@ public class BudgetStatusDetailsFragment extends Fragment {
                 TV_budgetStatus.setText("Transaction Details");
             }
         });
-
-        ArrayList<Transaction> transactions = new DBhandler(getContext()).getAllTransactionsbyCategory(cid);
+        int curr_month = Calendar.getInstance().get(Calendar.MONTH);
+        ArrayList<Transaction> transactions = new DBhandler(getContext()).getAllTransactionsbyCategory(cid, curr_month+1);
         Collections.reverse(transactions);
 
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
