@@ -120,7 +120,7 @@ public class BudgetFragment extends Fragment {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                TV_budgetTitle.setText("Budget ("+months[month]+"-"+year+")");
+                TV_budgetTitle.setText(months[month]+"-"+year);
             }
         });
 

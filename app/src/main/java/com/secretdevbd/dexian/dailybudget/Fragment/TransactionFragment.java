@@ -119,7 +119,7 @@ public class TransactionFragment extends Fragment {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                TV_txnTitle.setText("Transactions ("+months[month]+"-"+year+")");
+                TV_txnTitle.setText(months[month]+"-"+year);
             }
         });
 

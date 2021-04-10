@@ -23,7 +23,7 @@
                 android:layout_height="0dp"
                 android:text="@string/overview"
                 android:textColor="#000000"
-                android:textSize="30dp"
+                android:textSize="25dp"
                 android:fontFamily="@font/rajdhani_medium"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -55,7 +55,7 @@
                     android:text="Income"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -68,7 +68,7 @@
                     android:text="$ 200"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical|end"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="@color/dark_green"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -100,7 +100,7 @@
                     android:text="Expense"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -113,7 +113,7 @@
                     android:text="$ 200"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical|end"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="@color/red"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -145,7 +145,7 @@
                     android:text="Balance"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -158,7 +158,7 @@
                     android:text="$ 200"
                     android:fontFamily="@font/rajdhani_medium"
                     android:gravity="center_vertical|end"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     android:padding="8dp"/>
@@ -217,7 +217,8 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/rajdhani_medium"
             android:layout_weight="2"
-            android:background="@drawable/pressed_back"/>
+            android:background="@drawable/pressed_back"
+            android:layout_margin="10dp"/>
 
         <TextView
             android:id="@+id/TV_monthYear"
@@ -225,7 +226,7 @@
             android:layout_height="match_parent"
             android:layout_weight="6"
             android:text="Oct-2020"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:gravity="center"
             android:textColor="#000000"
             android:textStyle="bold"
@@ -237,7 +238,8 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/rajdhani_medium"
             android:layout_weight="2"
-            android:background="@drawable/pressed_forward"/>
+            android:background="@drawable/pressed_forward"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 

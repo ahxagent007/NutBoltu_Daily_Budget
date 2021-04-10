@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "320822315673",
+    "project_id": "daily-budget-f8262",
+    "storage_bucket": "daily-budget-f8262.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320822315673:android:5f07dba26952a8778a4608",
+        "android_client_info": {
+          "package_name": "com.secretdevbd.dexian.dailybudget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320822315673-pttpab9b9htp89lnca7r30u007000isb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.secretdevbd.dexian.dailybudget",
+            "certificate_hash": "4f827842fce0b383e84115bdd37e125ee937aafd"
+          }
+        },
+        {
+          "client_id": "320822315673-82grm07p7nqpcomc20a6i9fjftu07bfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIGhive9fQ0NJV6wbGH2uJoCJS9ziM_IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320822315673-82grm07p7nqpcomc20a6i9fjftu07bfv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
